@@ -19,12 +19,16 @@ namespace MemoryGame
 
         private void backToMenuButton_Click(object sender, EventArgs e)
         {
-
+            MainPageForm mainPage = new MainPageForm();
+            mainPage.Show();
+            this.Close();
         }
 
         private void easyLevelButton_Click(object sender, EventArgs e)
         {
-
+            EasyLevel easy = new EasyLevel();
+            easy.Show();
+            this.Close();
         }
 
         private void mediumLevelButton_Click(object sender, EventArgs e)
