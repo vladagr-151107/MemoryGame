@@ -28,18 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelTime = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // label1
+            // labelTime
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.labelTime.AutoSize = true;
+            this.labelTime.Location = new System.Drawing.Point(271, 9);
+            this.labelTime.Name = "labelTime";
+            this.labelTime.Size = new System.Drawing.Size(52, 13);
+            this.labelTime.TabIndex = 0;
+            this.labelTime.Text = "labelTime";
             // 
             // EasyLevel
             // 
@@ -47,7 +46,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.AliceBlue;
             this.ClientSize = new System.Drawing.Size(584, 581);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelTime);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "EasyLevel";
             this.Text = "EasyLevel";
             this.ResumeLayout(false);
@@ -57,6 +58,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelTime;
     }
 }
