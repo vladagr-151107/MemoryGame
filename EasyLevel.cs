@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Media;
 using System.Windows.Forms;
 
 namespace MemoryGame
@@ -16,40 +13,47 @@ namespace MemoryGame
         private List<Image> images = new List<Image>();
         private List<PictureBox> cards = new List<PictureBox>();
         private PictureBox firstCard, secondCard;
-        private Timer flipBackTimer;
-        private Timer previewTimer;
-        private Timer gameTimer;
-        private Label timeLabel;
-        private Image cardBackImage;
+        private Timer flipBackTimer, gameTimer, startTimer, removeMatchedTimer;
+        private Image cardBack;
         private int timeElapsed = 0;
+        private int matchedPairs = 0;
+        private int totalPairs = 8;
+
+        private string bestTimeFile = "best_time.txt";
+        private SoundPlayer mismatchSound;
 
         public EasyLevel()
         {
             InitializeComponent();
+
             LoadImages();
+            LoadCardBack();
+            LoadSound();
             CreateBoard(4, 4);
-            AddTimerLabel();
 
             flipBackTimer = new Timer();
-            flipBackTimer.Interval = 2000; // Для показа совпавшей пары 2 секунды
+            flipBackTimer.Interval = 1000;
             flipBackTimer.Tick += FlipBackTimer_Tick;
 
-            previewTimer = new Timer();
-            previewTimer.Interval = 3000;
-            previewTimer.Tick += PreviewTimer_Tick;
+            removeMatchedTimer = new Timer();
+            removeMatchedTimer.Interval = 2000;
+            removeMatchedTimer.Tick += RemoveMatchedTimer_Tick;
 
             gameTimer = new Timer();
             gameTimer.Interval = 1000;
             gameTimer.Tick += GameTimer_Tick;
 
-            previewTimer.Start();
+            startTimer = new Timer();
+            startTimer.Interval = 3000;
+            startTimer.Tick += StartTimer_Tick;
+
+            labelTime.Text = "Time: 00:00";
+            startTimer.Start();
         }
 
         private void LoadImages()
         {
             string basePath = Path.Combine(Application.StartupPath, "Images");
-            cardBackImage = Image.FromFile(Path.Combine(basePath, "zooTicket.jpg")); // рубашка карты
-
             images.Clear();
             images.Add(Image.FromFile(Path.Combine(basePath, "bet.JPG")));
             images.Add(Image.FromFile(Path.Combine(basePath, "cat.JPG")));
@@ -59,43 +63,61 @@ namespace MemoryGame
             images.Add(Image.FromFile(Path.Combine(basePath, "paws.JPG")));
             images.Add(Image.FromFile(Path.Combine(basePath, "polarBear.JPG")));
             images.Add(Image.FromFile(Path.Combine(basePath, "rabbit.JPG")));
-
             images.AddRange(images);
             Shuffle(images);
         }
 
+        private void LoadCardBack()
+        {
+            string basePath = Path.Combine(Application.StartupPath, "Images");
+            cardBack = Image.FromFile(Path.Combine(basePath, "zooTicket.JPG"));
+        }
+
+        private void LoadSound()
+        {
+            string soundPath = Path.Combine(Application.StartupPath, "error.wav");
+            if (File.Exists(soundPath))
+            {
+                mismatchSound = new SoundPlayer(soundPath);
+            }
+        }
+
         private void Shuffle(List<Image> list)
         {
-            Random random = new Random();
+            Random rand = new Random();
             for (int i = list.Count - 1; i > 0; i--)
             {
-                int j = random.Next(i + 1);
+                int j = rand.Next(i + 1);
                 var temp = list[i];
                 list[i] = list[j];
                 list[j] = temp;
             }
         }
 
-        private void CreateBoard(int rows, int columns)
+        private void CreateBoard(int rows, int cols)
         {
-            int cardSize = 130;
             int padding = 10;
+            int startY = labelTime.Bottom + 10;
+            int availableWidth = this.ClientSize.Width - (cols + 1) * padding;
+            int availableHeight = this.ClientSize.Height - startY - (rows + 1) * padding;
+
+            int cardSize = Math.Min(availableWidth / cols, availableHeight / rows);
             int index = 0;
 
             for (int row = 0; row < rows; row++)
             {
-                for (int col = 0; col < columns; col++)
+                for (int col = 0; col < cols; col++)
                 {
                     PictureBox pb = new PictureBox();
                     pb.Width = pb.Height = cardSize;
                     pb.Left = col * (cardSize + padding) + padding;
-                    pb.Top = row * (cardSize + padding) + padding;
-                    pb.BorderStyle = BorderStyle.FixedSingle;
+                    pb.Top = startY + row * (cardSize + padding);
                     pb.SizeMode = PictureBoxSizeMode.StretchImage;
+                    pb.BorderStyle = BorderStyle.FixedSingle;
 
                     if (index < images.Count)
                     {
-                        pb.Image = images[index]; // покажем все картинки сначала
+                        pb.Image = images[index];
                         pb.Tag = images[index];
                     }
 
@@ -107,45 +129,27 @@ namespace MemoryGame
             }
         }
 
-        private void AddTimerLabel()
+        private void StartTimer_Tick(object sender, EventArgs e)
         {
-            timeLabel = new Label();
-            timeLabel.Font = new Font("Arial", 16);
-            timeLabel.ForeColor = Color.Black;
-            timeLabel.Text = "Time: 0";
-            timeLabel.AutoSize = true;
-            timeLabel.Top = cards.Last().Bottom + 10;
-            timeLabel.Left = 10;
-            this.Controls.Add(timeLabel);
-        }
-
-        private void PreviewTimer_Tick(object sender, EventArgs e)
-        {
-            previewTimer.Stop();
-
-            // Скрываем все карты (устанавливаем рубашку)
-            foreach (var card in cards)
-            {
-                card.Image = cardBackImage;
-            }
-
+            startTimer.Stop();
+            HideAllCards();
             gameTimer.Start();
         }
 
-        private void GameTimer_Tick(object sender, EventArgs e)
+        private void HideAllCards()
         {
-            timeElapsed++;
-            timeLabel.Text = "Time: " + timeElapsed;
+            foreach (var card in cards)
+            {
+                card.Image = cardBack;
+            }
         }
 
         private void Card_Click(object sender, EventArgs e)
         {
-            if (flipBackTimer.Enabled || previewTimer.Enabled) return;
+            if (flipBackTimer.Enabled || removeMatchedTimer.Enabled) return;
 
             PictureBox clicked = sender as PictureBox;
-
-            // Уже открытая карта — игнорируем
-            if (clicked.Image != cardBackImage) return;
+            if (clicked == null || clicked.Image != cardBack || clicked == firstCard) return;
 
             clicked.Image = (Image)clicked.Tag;
 
@@ -159,11 +163,12 @@ namespace MemoryGame
 
                 if (firstCard.Tag.Equals(secondCard.Tag))
                 {
-                    flipBackTimer.Start(); // таймер для удаления пары
+                    removeMatchedTimer.Start();
                 }
                 else
                 {
-                    flipBackTimer.Start(); // таймер для скрытия
+                    mismatchSound?.Play();
+                    flipBackTimer.Start();
                 }
             }
         }
@@ -172,30 +177,57 @@ namespace MemoryGame
         {
             flipBackTimer.Stop();
 
-            if (firstCard != null && secondCard != null)
+            if (firstCard != null) firstCard.Image = cardBack;
+            if (secondCard != null) secondCard.Image = cardBack;
+
+            firstCard = secondCard = null;
+        }
+
+        private void RemoveMatchedTimer_Tick(object sender, EventArgs e)
+        {
+            removeMatchedTimer.Stop();
+
+            if (firstCard != null) firstCard.Visible = false;
+            if (secondCard != null) secondCard.Visible = false;
+
+            firstCard = secondCard = null;
+            matchedPairs++;
+
+            if (matchedPairs == totalPairs)
             {
-                if (firstCard.Tag.Equals(secondCard.Tag))
+                gameTimer.Stop();
+                CheckAndSaveBestTime();
+                MessageBox.Show("You won!", "Victory");
+            }
+        }
+
+        private void GameTimer_Tick(object sender, EventArgs e)
+        {
+            timeElapsed++;
+            labelTime.Text = "Time: " + TimeSpan.FromSeconds(timeElapsed).ToString(@"mm\:ss");
+        }
+
+        private void CheckAndSaveBestTime()
+        {
+            try
+            {
+                string path = Path.Combine(Application.StartupPath, bestTimeFile);
+                if (File.Exists(path))
                 {
-                    // Совпавшие — убираем с формы
-                    this.Controls.Remove(firstCard);
-                    this.Controls.Remove(secondCard);
-                    cards.Remove(firstCard);
-                    cards.Remove(secondCard);
+                    int best = int.Parse(File.ReadAllText(path));
+                    if (timeElapsed < best)
+                    {
+                        File.WriteAllText(path, timeElapsed.ToString());
+                    }
                 }
                 else
                 {
-                    // Не совпали — скрываем
-                    firstCard.Image = cardBackImage;
-                    secondCard.Image = cardBackImage;
+                    File.WriteAllText(path, timeElapsed.ToString());
                 }
             }
-
-            firstCard = secondCard = null;
-
-            if (cards.Count == 0)
+            catch (Exception ex)
             {
-                gameTimer.Stop();
-                MessageBox.Show("Победа! Время: " + timeElapsed + " сек.");
+                MessageBox.Show("Error saving best time: " + ex.Message);
             }
         }
     }
