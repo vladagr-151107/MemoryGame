@@ -104,6 +104,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\backCard.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\bet.JPG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

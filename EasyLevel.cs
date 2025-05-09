@@ -70,7 +70,7 @@ namespace MemoryGame
         private void LoadCardBack()
         {
             string basePath = Path.Combine(Application.StartupPath, "Images");
-            cardBack = Image.FromFile(Path.Combine(basePath, "zooTicket.JPG"));
+            cardBack = Image.FromFile(Path.Combine(basePath, "backCard.jpg"));
         }
 
         private void LoadSound()
