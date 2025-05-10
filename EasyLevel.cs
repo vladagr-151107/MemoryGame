@@ -18,6 +18,8 @@ namespace MemoryGame
         private int timeElapsed = 0;
         private int matchedPairs = 0;
         private int totalPairs = 8;
+        private Label labelBestTime;
+        private SoundPlayer winSound;
 
         private string bestTimeFile = "best_time.txt";
         private SoundPlayer mismatchSound;
@@ -49,6 +51,15 @@ namespace MemoryGame
 
             labelTime.Text = "Time: 00:00";
             startTimer.Start();
+
+            labelBestTime = new Label();
+            labelBestTime.AutoSize = true;
+            labelBestTime.Location = new Point(labelTime.Right + 20, labelTime.Top);
+            labelBestTime.Font = labelTime.Font;
+            labelBestTime.Text = "Best: 00:00";
+            this.Controls.Add(labelBestTime);
+
+            UpdateBestTimeLabel();
         }
 
         private void LoadImages()
@@ -71,15 +82,6 @@ namespace MemoryGame
         {
             string basePath = Path.Combine(Application.StartupPath, "Images");
             cardBack = Image.FromFile(Path.Combine(basePath, "backCard.jpg"));
-        }
-
-        private void LoadSound()
-        {
-            string soundPath = Path.Combine(Application.StartupPath, "error.wav");
-            if (File.Exists(soundPath))
-            {
-                mismatchSound = new SoundPlayer(soundPath);
-            }
         }
 
         private void Shuffle(List<Image> list)
@@ -199,6 +201,14 @@ namespace MemoryGame
                 CheckAndSaveBestTime();
                 MessageBox.Show("You won!", "Victory");
             }
+            if (matchedPairs == totalPairs)
+            {
+                gameTimer.Stop();
+                CheckAndSaveBestTime();
+                winSound?.Play();
+                MessageBox.Show("You won!", "Victory");
+            }
+
         }
 
         private void GameTimer_Tick(object sender, EventArgs e)
@@ -206,8 +216,7 @@ namespace MemoryGame
             timeElapsed++;
             labelTime.Text = "Time: " + TimeSpan.FromSeconds(timeElapsed).ToString(@"mm\:ss");
         }
-
-        private void CheckAndSaveBestTime()
+        private void UpdateBestTimeLabel()
         {
             try
             {
@@ -215,20 +224,64 @@ namespace MemoryGame
                 if (File.Exists(path))
                 {
                     int best = int.Parse(File.ReadAllText(path));
+                    labelBestTime.Text = "Best: " + TimeSpan.FromSeconds(best).ToString(@"mm\:ss");
+                }
+            }
+            catch
+            {
+                labelBestTime.Text = "Best: --:--";
+            }
+        }
+        private void CheckAndSaveBestTime()
+        {
+            try
+            {
+                string path = Path.Combine(Application.StartupPath, bestTimeFile);
+                bool isNewBest = false;
+
+                if (File.Exists(path))
+                {
+                    int best = int.Parse(File.ReadAllText(path));
                     if (timeElapsed < best)
                     {
                         File.WriteAllText(path, timeElapsed.ToString());
+                        isNewBest = true;
                     }
                 }
                 else
                 {
                     File.WriteAllText(path, timeElapsed.ToString());
+                    isNewBest = true;
+                }
+
+                if (isNewBest)
+                {
+                    UpdateBestTimeLabel();
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error saving best time: " + ex.Message);
             }
+        }
+        private void LoadSound()
+        {
+            string errorPath = Path.Combine(Application.StartupPath, "error.wav");
+            if (File.Exists(errorPath))
+            {
+                mismatchSound = new SoundPlayer(errorPath);
+            }
+
+            string winPath = Path.Combine(Application.StartupPath, "win.wav");
+            if (File.Exists(winPath))
+            {
+                winSound = new SoundPlayer(winPath);
+            }
+        }
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            Application.Exit(); 
+            base.OnFormClosing(e);
         }
     }
 }
