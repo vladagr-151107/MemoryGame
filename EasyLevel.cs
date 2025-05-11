@@ -19,10 +19,11 @@ namespace MemoryGame
         private int matchedPairs = 0;
         private int totalPairs = 8;
         private Label labelBestTime;
+        private SoundPlayer matchSound;
         private SoundPlayer winSound;
+        private SoundPlayer mismatchSound;
 
         private string bestTimeFile = "best_time.txt";
-        private SoundPlayer mismatchSound;
 
         public EasyLevel()
         {
@@ -191,16 +192,9 @@ namespace MemoryGame
 
             if (firstCard != null) firstCard.Visible = false;
             if (secondCard != null) secondCard.Visible = false;
-
+            matchSound?.Play();
             firstCard = secondCard = null;
             matchedPairs++;
-
-            if (matchedPairs == totalPairs)
-            {
-                gameTimer.Stop();
-                CheckAndSaveBestTime();
-                MessageBox.Show("You won!", "Victory");
-            }
             if (matchedPairs == totalPairs)
             {
                 gameTimer.Stop();
@@ -266,18 +260,26 @@ namespace MemoryGame
         }
         private void LoadSound()
         {
-            string errorPath = Path.Combine(Application.StartupPath, "error.wav");
-            if (File.Exists(errorPath))
+            string soundDir = Path.Combine(Application.StartupPath, "Sounds");
+
+            string matchPath = Path.Combine(soundDir, "match.wav");
+            if (File.Exists(matchPath))
+                matchSound = new SoundPlayer(matchPath);
+
+            string mismatchPath = Path.Combine(soundDir, "mismatch.wav");
+            if (File.Exists(mismatchPath))
+                mismatchSound = new SoundPlayer(mismatchPath);
+
+            string winPath = Path.Combine(soundDir, "win.wav");
+            if (File.Exists(winPath))
+                winSound = new SoundPlayer(winPath);
+            if (!File.Exists(winPath))
             {
-                mismatchSound = new SoundPlayer(errorPath);
+                MessageBox.Show("Win sound not found: " + winPath);
             }
 
-            string winPath = Path.Combine(Application.StartupPath, "win.wav");
-            if (File.Exists(winPath))
-            {
-                winSound = new SoundPlayer(winPath);
-            }
         }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             Application.Exit(); 
