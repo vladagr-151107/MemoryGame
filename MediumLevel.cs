@@ -7,7 +7,7 @@ using NAudio.Wave;
 
 namespace MemoryGame
 {
-    public partial class EasyLevel : Form
+    public partial class MediumLevel : Form
     {
         private List<Image> images = new List<Image>();
         private List<PictureBox> cards = new List<PictureBox>();
@@ -16,7 +16,7 @@ namespace MemoryGame
         private Image cardBack;
         private int timeElapsed = 0;
         private int matchedPairs = 0;
-        private int totalPairs = 8;
+        private int totalPairs = 10;
         private Label labelBestTime;
 
         private string soundDir;
@@ -24,9 +24,9 @@ namespace MemoryGame
         private string mismatchSoundPath;
         private string winSoundPath;
 
-        private string bestTimeFile = "easy_best_time.txt";
+        private string bestTimeFile = "medium_best_time.txt";
 
-        public EasyLevel()
+        public MediumLevel()
         {
             InitializeComponent();
 
@@ -37,7 +37,7 @@ namespace MemoryGame
 
             LoadImages();
             LoadCardBack();
-            CreateBoard(4, 4);
+            CreateBoard(4, 5);
 
             flipBackTimer = new Timer();
             flipBackTimer.Interval = 1000;
@@ -52,7 +52,7 @@ namespace MemoryGame
             gameTimer.Tick += GameTimer_Tick;
 
             startTimer = new Timer();
-            startTimer.Interval = 3000;
+            startTimer.Interval = 4000;
             startTimer.Tick += StartTimer_Tick;
 
             labelTime.Text = "Time: 00:00";
@@ -80,6 +80,8 @@ namespace MemoryGame
             images.Add(Image.FromFile(Path.Combine(basePath, "paws.JPG")));
             images.Add(Image.FromFile(Path.Combine(basePath, "polarBear.JPG")));
             images.Add(Image.FromFile(Path.Combine(basePath, "rabbit.JPG")));
+            images.Add(Image.FromFile(Path.Combine(basePath, "shrimps.JPG")));
+            images.Add(Image.FromFile(Path.Combine(basePath, "zooTicket.JPG")));    
             images.AddRange(images);
             Shuffle(images);
         }
@@ -208,15 +210,16 @@ namespace MemoryGame
                 CheckAndSaveBestTime();
                 PlaySound(winSoundPath);
                 MessageBox.Show("You won!", "Victory");
+                gameTimer.Stop();
                 string gameDir = Application.StartupPath;
                 string easyPath = Path.Combine(gameDir, "easy_passed.txt");
                 string mediumPath = Path.Combine(gameDir, "medium_passed.txt");
                 string hardPath = Path.Combine(gameDir, "hard_passed.txt");
-                if (!File.Exists(easyPath))
-                    File.WriteAllText(easyPath, "true");
-                bool mediumPassed = File.Exists(mediumPath);
+                if (!File.Exists(mediumPath))
+                    File.WriteAllText(mediumPath, "true");
+                bool easyPassed = File.Exists(easyPath);
                 bool hardPassed = File.Exists(hardPath);
-                if (mediumPassed && hardPassed)
+                if (easyPassed && hardPassed)
                 {
                     MessageBox.Show("Thanks, you passed the game!", "End of the game 🎉");
                     Application.Exit();
@@ -226,12 +229,7 @@ namespace MemoryGame
                     var result = MessageBox.Show("Do you want to keep going?", "Keep going?", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
-                        if (!mediumPassed)
-                        {
-                            MediumLevel medium = new MediumLevel();
-                            medium.Show();
-                        }
-                        else if (!hardPassed)
+                        if (!hardPassed)
                         {
                             HardLevel hard = new HardLevel();
                             hard.Show();
@@ -243,6 +241,7 @@ namespace MemoryGame
                         MessageBox.Show("Bye, thanks for the game!");
                         Application.Exit();
                     }
+
                 }
             }
         }

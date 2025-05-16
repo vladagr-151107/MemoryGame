@@ -52,6 +52,12 @@
     <Compile Include="EasyLevel.Designer.cs">
       <DependentUpon>EasyLevel.cs</DependentUpon>
     </Compile>
+    <Compile Include="HardLevel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HardLevel.Designer.cs">
+      <DependentUpon>HardLevel.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +70,12 @@
     <Compile Include="LevelChoiceForm.Designer.cs">
       <DependentUpon>LevelChoiceForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MediumLevel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MediumLevel.Designer.cs">
+      <DependentUpon>MediumLevel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsForm.cs">
@@ -75,11 +87,17 @@
     <EmbeddedResource Include="EasyLevel.resx">
       <DependentUpon>EasyLevel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="HardLevel.resx">
+      <DependentUpon>HardLevel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LevelChoiceForm.resx">
       <DependentUpon>LevelChoiceForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainPage.resx">
       <DependentUpon>MainPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MediumLevel.resx">
+      <DependentUpon>MediumLevel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -110,13 +128,34 @@
     <Content Include="Images\backCard.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\bear.PNG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\bee.PNG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\bet.JPG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\cat.JPG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\cat2.PNG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\chick.PNG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\elephant.JPG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\frog.PNG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\hummingbird.JPG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\mice.PNG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\mouse.JPG">
@@ -137,6 +176,9 @@
     <Content Include="Images\shrimp.JPG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\shrimps.JPG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\zooTicket.JPG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -149,6 +191,11 @@
     <Content Include="Sounds\win.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NAudio">
+      <Version>2.2.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

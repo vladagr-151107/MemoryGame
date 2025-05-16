@@ -33,12 +33,16 @@ namespace MemoryGame
 
         private void mediumLevelButton_Click(object sender, EventArgs e)
         {
-
+            MediumLevel medium = new MediumLevel();
+            medium.Show();
+            this.Close();
         }
 
         private void hardLevelButton_Click(object sender, EventArgs e)
         {
-
+            HardLevel hard = new HardLevel();
+            hard.Show();
+            this.Close();
         }
     }
 }
