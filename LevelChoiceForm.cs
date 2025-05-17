@@ -21,7 +21,7 @@ namespace MemoryGame
         {
             MainPageForm mainPage = new MainPageForm();
             mainPage.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void easyLevelButton_Click(object sender, EventArgs e)
@@ -43,6 +43,11 @@ namespace MemoryGame
             HardLevel hard = new HardLevel();
             hard.Show();
             this.Close();
+        }
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            Application.Exit();
+            base.OnFormClosing(e);
         }
     }
 }
