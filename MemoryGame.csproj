@@ -52,7 +52,6 @@
     <Compile Include="EasyLevel.Designer.cs">
       <DependentUpon>EasyLevel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GameSettings.cs" />
     <Compile Include="HardLevel.cs">
       <SubType>Form</SubType>
     </Compile>

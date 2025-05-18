@@ -24,6 +24,7 @@ namespace MemoryGame
         private string mismatchSoundPath;
         private string winSoundPath;
 
+
         private string bestTimeFile = "medium_best_time.txt";
 
         public MediumLevel()
@@ -66,6 +67,7 @@ namespace MemoryGame
             this.Controls.Add(labelBestTime);
 
             UpdateBestTimeLabel();
+            this.BackColor = Color.FromName(Properties.Settings.Default.BackgroundColor);
         }
 
         private void LoadImages()
@@ -208,7 +210,7 @@ namespace MemoryGame
             {
                 gameTimer.Stop();
                 CheckAndSaveBestTime();
-                PlaySound(winSoundPath);
+                PlaySoundByType("win");
                 MessageBox.Show("You won!", "Victory");
                 gameTimer.Stop();
                 string gameDir = Application.StartupPath;
@@ -251,7 +253,6 @@ namespace MemoryGame
             timeElapsed++;
             labelTime.Text = "Time: " + TimeSpan.FromSeconds(timeElapsed).ToString(@"mm\:ss");
         }
-
         private void UpdateBestTimeLabel()
         {
             try
@@ -323,6 +324,37 @@ namespace MemoryGame
         {
             Application.Exit();
             base.OnFormClosing(e);
+        }
+        private void PlaySoundByType(string type)
+        {
+            string filePath = null;
+
+            switch (type)
+            {
+                case "match":
+                    filePath = matchSoundPath;
+                    break;
+                case "mismatch":
+                    filePath = mismatchSoundPath;
+                    break;
+                case "win":
+                    filePath = winSoundPath;
+                    break;
+            }
+
+            if (filePath == null || !File.Exists(filePath)) return;
+
+            var reader = new AudioFileReader(filePath);
+            var player = new WaveOutEvent();
+            player.Init(reader);
+            player.Volume = Properties.Settings.Default.Volume;
+            player.Play();
+
+            player.PlaybackStopped += (s, e) =>
+            {
+                player.Dispose();
+                reader.Dispose();
+            };
         }
     }
 }

@@ -28,21 +28,21 @@ namespace MemoryGame
         {
             EasyLevel easy = new EasyLevel();
             easy.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void mediumLevelButton_Click(object sender, EventArgs e)
         {
             MediumLevel medium = new MediumLevel();
             medium.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void hardLevelButton_Click(object sender, EventArgs e)
         {
             HardLevel hard = new HardLevel();
             hard.Show();
-            this.Close();
+            this.Hide();
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {

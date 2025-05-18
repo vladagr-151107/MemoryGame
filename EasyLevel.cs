@@ -66,6 +66,7 @@ namespace MemoryGame
             this.Controls.Add(labelBestTime);
 
             UpdateBestTimeLabel();
+            this.BackColor = Color.FromName(Properties.Settings.Default.BackgroundColor);
         }
 
         private void LoadImages()
@@ -171,12 +172,12 @@ namespace MemoryGame
 
                 if (firstCard.Tag.Equals(secondCard.Tag))
                 {
-                    PlaySound(matchSoundPath);
+                    PlaySoundByType("match");
                     removeMatchedTimer.Start();
                 }
                 else
                 {
-                    PlaySound(mismatchSoundPath);
+                    PlaySoundByType("mismatch");
                     flipBackTimer.Start();
                 }
             }
@@ -206,7 +207,7 @@ namespace MemoryGame
             {
                 gameTimer.Stop();
                 CheckAndSaveBestTime();
-                PlaySound(winSoundPath);
+                PlaySoundByType("win");
                 MessageBox.Show("You won!", "Victory");
                 string gameDir = Application.StartupPath;
                 string easyPath = Path.Combine(gameDir, "easy_passed.txt");
@@ -302,15 +303,34 @@ namespace MemoryGame
                 MessageBox.Show("Error saving best time: " + ex.Message);
             }
         }
-
-        private void PlaySound(string filePath, float volume = 0.5f)
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (!File.Exists(filePath)) return;
+            Application.Exit();
+            base.OnFormClosing(e);
+        }
+        private void PlaySoundByType(string type)
+        {
+            string filePath = null;
+
+            switch (type)
+            {
+                case "match":
+                    filePath = matchSoundPath;
+                    break;
+                case "mismatch":
+                    filePath = mismatchSoundPath;
+                    break;
+                case "win":
+                    filePath = winSoundPath;
+                    break;
+            }
+
+            if (filePath == null || !File.Exists(filePath)) return;
 
             var reader = new AudioFileReader(filePath);
             var player = new WaveOutEvent();
             player.Init(reader);
-            player.Volume = volume;
+            player.Volume = Properties.Settings.Default.Volume;
             player.Play();
 
             player.PlaybackStopped += (s, e) =>
@@ -319,11 +339,6 @@ namespace MemoryGame
                 reader.Dispose();
             };
         }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            Application.Exit();
-            base.OnFormClosing(e);
-        }
     }
+
 }

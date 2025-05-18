@@ -66,6 +66,7 @@ namespace MemoryGame
             this.Controls.Add(labelBestTime);
 
             UpdateBestTimeLabel();
+            this.BackColor = Color.FromName(Properties.Settings.Default.BackgroundColor);
         }
 
         private void LoadImages()
@@ -262,7 +263,6 @@ namespace MemoryGame
             timeElapsed++;
             labelTime.Text = "Time: " + TimeSpan.FromSeconds(timeElapsed).ToString(@"mm\:ss");
         }
-
         private void UpdateBestTimeLabel()
         {
             try

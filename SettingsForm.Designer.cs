@@ -76,6 +76,7 @@
             this.buttonDescription.TabIndex = 7;
             this.buttonDescription.Text = "Read it";
             this.buttonDescription.UseVisualStyleBackColor = false;
+            this.buttonDescription.Click += new System.EventHandler(this.buttonDescription_Click);
             // 
             // labelDescription
             // 
@@ -118,7 +119,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.AliceBlue;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(691, 450);
             this.Controls.Add(this.comboBoxBackground);
             this.Controls.Add(this.backToMenuButton);
             this.Controls.Add(this.labelDescription);

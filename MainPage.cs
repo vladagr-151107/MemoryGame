@@ -15,6 +15,7 @@ namespace MemoryGame
         public MainPageForm()
         {
             InitializeComponent();
+            this.BackColor = Color.FromName(Properties.Settings.Default.BackgroundColor);
         }
 
         private void playButton_Click(object sender, EventArgs e)
