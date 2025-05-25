@@ -46,5 +46,17 @@ namespace MemoryGame.Properties {
                 this["BackgroundColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool VolumeInitialized {
+            get {
+                return ((bool)(this["VolumeInitialized"]));
+            }
+            set {
+                this["VolumeInitialized"] = value;
+            }
+        }
     }
 }

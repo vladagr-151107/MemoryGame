@@ -30,6 +30,19 @@ namespace MemoryGame
         public MediumLevel()
         {
             InitializeComponent();
+            if (string.IsNullOrEmpty(Properties.Settings.Default.BackgroundColor))
+            {
+                Properties.Settings.Default.BackgroundColor = "AliceBlue";
+                Properties.Settings.Default.Save();
+            }
+
+            if (Properties.Settings.Default.VolumeInitialized)
+            {
+                Properties.Settings.Default.Volume = 0.5f;
+                Properties.Settings.Default.Save();
+            }
+            string bgColor = Properties.Settings.Default.BackgroundColor;
+            this.BackColor = Color.FromName(bgColor);
 
             soundDir = Path.Combine(Application.StartupPath, "Sounds");
             matchSoundPath = Path.Combine(soundDir, "match.wav");

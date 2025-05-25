@@ -30,7 +30,7 @@
         {
             this.backToMenuButton = new System.Windows.Forms.Button();
             this.easyLevelButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.Label = new System.Windows.Forms.Label();
             this.mediumLevelButton = new System.Windows.Forms.Button();
             this.hardLevelButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -58,15 +58,15 @@
             this.easyLevelButton.UseVisualStyleBackColor = false;
             this.easyLevelButton.Click += new System.EventHandler(this.easyLevelButton_Click);
             // 
-            // label1
+            // Label
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(252, 21);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(292, 25);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Choose the level of the game";
+            this.Label.AutoSize = true;
+            this.Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Label.Location = new System.Drawing.Point(252, 21);
+            this.Label.Name = "Label";
+            this.Label.Size = new System.Drawing.Size(292, 25);
+            this.Label.TabIndex = 2;
+            this.Label.Text = "Choose the level of the game";
             // 
             // mediumLevelButton
             // 
@@ -100,7 +100,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.hardLevelButton);
             this.Controls.Add(this.mediumLevelButton);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.Label);
             this.Controls.Add(this.easyLevelButton);
             this.Controls.Add(this.backToMenuButton);
             this.Name = "LevelChoiceForm";
@@ -114,7 +114,7 @@
 
         private System.Windows.Forms.Button backToMenuButton;
         private System.Windows.Forms.Button easyLevelButton;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label Label;
         private System.Windows.Forms.Button mediumLevelButton;
         private System.Windows.Forms.Button hardLevelButton;
     }

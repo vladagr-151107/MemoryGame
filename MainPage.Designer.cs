@@ -28,22 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.Label = new System.Windows.Forms.Label();
             this.playButton = new System.Windows.Forms.Button();
             this.settingsButton = new System.Windows.Forms.Button();
             this.exitButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label1
+            // Label
             // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(281, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(238, 37);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Memory Game";
+            this.Label.AutoSize = true;
+            this.Label.BackColor = System.Drawing.Color.Transparent;
+            this.Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Label.Location = new System.Drawing.Point(281, 9);
+            this.Label.Name = "Label";
+            this.Label.Size = new System.Drawing.Size(238, 37);
+            this.Label.TabIndex = 0;
+            this.Label.Text = "Memory Game";
             // 
             // playButton
             // 
@@ -90,7 +90,7 @@
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.playButton);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.Label);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -103,7 +103,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label Label;
         private System.Windows.Forms.Button playButton;
         private System.Windows.Forms.Button settingsButton;
         private System.Windows.Forms.Button exitButton;

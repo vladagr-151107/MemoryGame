@@ -113,6 +113,7 @@
             this.comboBoxBackground.Name = "comboBoxBackground";
             this.comboBoxBackground.Size = new System.Drawing.Size(121, 21);
             this.comboBoxBackground.TabIndex = 11;
+            this.comboBoxBackground.SelectedIndexChanged += new System.EventHandler(this.comboBoxBackground_SelectedIndexChanged);
             // 
             // SettingsForm
             // 

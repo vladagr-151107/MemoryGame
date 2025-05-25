@@ -15,7 +15,14 @@ namespace MemoryGame
         public MainPageForm()
         {
             InitializeComponent();
-            this.BackColor = Color.FromName(Properties.Settings.Default.BackgroundColor);
+
+            if (string.IsNullOrEmpty(Properties.Settings.Default.BackgroundColor))
+            {
+                Properties.Settings.Default.BackgroundColor = "AliceBlue";
+                Properties.Settings.Default.Save();
+            }
+            string bgColor = Properties.Settings.Default.BackgroundColor;
+            this.BackColor = Color.FromName(bgColor);
         }
 
         private void playButton_Click(object sender, EventArgs e)

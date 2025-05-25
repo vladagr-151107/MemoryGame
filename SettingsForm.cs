@@ -13,13 +13,20 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace MemoryGame
 {
-    //дана форма знаходиться у етапі розробки, тому її перевіряти поки що не треба
-    public partial class SettingsForm: Form
+    public partial class SettingsForm : Form
     {
         public SettingsForm()
         {
             InitializeComponent();
+            if (string.IsNullOrEmpty(Properties.Settings.Default.BackgroundColor))
+            {
+                Properties.Settings.Default.BackgroundColor = "AliceBlue";
+                Properties.Settings.Default.Save();
+            }
+            string bgColor = Properties.Settings.Default.BackgroundColor;
+            this.BackColor = Color.FromName(bgColor);
         }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             System.Windows.Forms.Application.Exit();
@@ -35,27 +42,40 @@ namespace MemoryGame
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
+            bool needSave = false;
+
+            if (string.IsNullOrEmpty(Properties.Settings.Default.BackgroundColor))
+            {
+                Properties.Settings.Default.BackgroundColor = "AliceBlue";
+                needSave = true;
+            }
+
+            // Проверяем флаг инициализации вместо значения Volume
+            if (!Properties.Settings.Default.VolumeInitialized)
+            {
+                Properties.Settings.Default.Volume = 0.5f; // 50%
+                Properties.Settings.Default.VolumeInitialized = true;
+                needSave = true;
+            }
+
+            if (needSave)
+            {
+                Properties.Settings.Default.Save();
+            }
+
+            // Настройка громкости
             trackBarVolume.Minimum = 0;
             trackBarVolume.Maximum = 100;
             float volume = Properties.Settings.Default.Volume;
             trackBarVolume.Value = (int)(volume * 100);
             labelVolume.Text = $"Volume: {trackBarVolume.Value}%";
 
-            comboBoxBackground.Items.AddRange(new string[]
-            {
-                "AliceBlue", "Gray", "LightBlue", "Blue", "Beige"
-            });
+            // Настройка фона
             string savedColor = Properties.Settings.Default.BackgroundColor;
-            if(comboBoxBackground.Items.Contains(savedColor))
-            {
-                comboBoxBackground.SelectedItem = savedColor;
-            }
-            else
-            {
-                comboBoxBackground.SelectedItem = "AliceBlue";
-            }
+            comboBoxBackground.SelectedItem = savedColor;
             this.BackColor = Color.FromName(savedColor);
         }
+
 
         private void trackBarVolume_Scroll(object sender, EventArgs e)
         {
@@ -67,16 +87,22 @@ namespace MemoryGame
 
         private void comboBoxBackground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string selectedColorName = comboBoxBackground.SelectedItem.ToString();
-            Properties.Settings.Default.BackgroundColor = selectedColorName;
-            Properties.Settings.Default.Save();
-            this.BackColor = Color.FromName(selectedColorName);
+            if (comboBoxBackground.SelectedItem != null)
+            {
+                string selectedColorName = comboBoxBackground.SelectedItem.ToString();
+                Properties.Settings.Default.BackgroundColor = selectedColorName;
+                Properties.Settings.Default.Save();
+                this.BackColor = Color.FromName(selectedColorName);
+
+                // Принудительно обновляем отображение
+                this.Refresh();
+            }
         }
 
         private void buttonDescription_Click(object sender, EventArgs e)
         {
             string description = "The Memory Match game is a classic logic and memory challenge.\n" +
-            "Your goal is to find all matching pairs of hidden pictures on the board.\\n" +
+            "Your goal is to find all matching pairs of hidden pictures on the board.\n" +
             "Click two cards per turn to reveal the images underneath.\n" +
             "If the images match, the pair will disappear.If not, the cards will flip back over.\n\n" +
             "The game continues until all pairs have been found.\n" +
