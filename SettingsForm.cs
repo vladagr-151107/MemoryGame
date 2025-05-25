@@ -7,9 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.LinkLabel;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace MemoryGame
 {
@@ -49,11 +46,9 @@ namespace MemoryGame
                 Properties.Settings.Default.BackgroundColor = "AliceBlue";
                 needSave = true;
             }
-
-            // Проверяем флаг инициализации вместо значения Volume
             if (!Properties.Settings.Default.VolumeInitialized)
             {
-                Properties.Settings.Default.Volume = 0.5f; // 50%
+                Properties.Settings.Default.Volume = 0.5f; 
                 Properties.Settings.Default.VolumeInitialized = true;
                 needSave = true;
             }
@@ -63,14 +58,11 @@ namespace MemoryGame
                 Properties.Settings.Default.Save();
             }
 
-            // Настройка громкости
             trackBarVolume.Minimum = 0;
             trackBarVolume.Maximum = 100;
             float volume = Properties.Settings.Default.Volume;
             trackBarVolume.Value = (int)(volume * 100);
             labelVolume.Text = $"Volume: {trackBarVolume.Value}%";
-
-            // Настройка фона
             string savedColor = Properties.Settings.Default.BackgroundColor;
             comboBoxBackground.SelectedItem = savedColor;
             this.BackColor = Color.FromName(savedColor);
@@ -93,8 +85,6 @@ namespace MemoryGame
                 Properties.Settings.Default.BackgroundColor = selectedColorName;
                 Properties.Settings.Default.Save();
                 this.BackColor = Color.FromName(selectedColorName);
-
-                // Принудительно обновляем отображение
                 this.Refresh();
             }
         }

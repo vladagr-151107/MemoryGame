@@ -15,15 +15,12 @@ namespace MemoryGame
         public LevelChoiceForm()
         {
             InitializeComponent();
-            string bgColor = Properties.Settings.Default.BackgroundColor;
-
-            if (string.IsNullOrEmpty(bgColor))
+            if (string.IsNullOrEmpty(Properties.Settings.Default.BackgroundColor))
             {
-                bgColor = "AliceBlue";
-                Properties.Settings.Default.BackgroundColor = bgColor;
+                Properties.Settings.Default.BackgroundColor = "AliceBlue";
                 Properties.Settings.Default.Save();
             }
-
+            string bgColor = Properties.Settings.Default.BackgroundColor;
             this.BackColor = Color.FromName(bgColor);
         }
 
