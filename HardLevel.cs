@@ -35,9 +35,10 @@ namespace MemoryGame
                 Properties.Settings.Default.Save();
             }
 
-            if (Properties.Settings.Default.VolumeInitialized)
+            if (!Properties.Settings.Default.VolumeInitialized)
             {
                 Properties.Settings.Default.Volume = 0.5f;
+                Properties.Settings.Default.VolumeInitialized = true;
                 Properties.Settings.Default.Save();
             }
             string bgColor = Properties.Settings.Default.BackgroundColor;
@@ -327,23 +328,22 @@ namespace MemoryGame
             }
         }
 
-        private void PlaySound(string filePath, float volume = 0.5f)
+        private void PlaySound(string filePath)
         {
             if (!File.Exists(filePath)) return;
 
             var reader = new AudioFileReader(filePath);
             var player = new WaveOutEvent();
             player.Init(reader);
-            player.Volume = volume;
-            player.Play();
+            player.Volume = Properties.Settings.Default.Volume;
 
+            player.Play();
             player.PlaybackStopped += (s, e) =>
             {
                 player.Dispose();
                 reader.Dispose();
             };
         }
-
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             Application.Exit();

@@ -35,9 +35,10 @@ namespace MemoryGame
                 Properties.Settings.Default.Save();
             }
 
-            if (Properties.Settings.Default.VolumeInitialized)
+            if (!Properties.Settings.Default.VolumeInitialized)
             {
                 Properties.Settings.Default.Volume = 0.5f;
+                Properties.Settings.Default.VolumeInitialized = true;
                 Properties.Settings.Default.Save();
             }
             string bgColor = Properties.Settings.Default.BackgroundColor;
